@@ -1,10 +1,10 @@
-from django.contrib.auth.models import User
 from django.db import models
-
-# Create your models here.
+from django.contrib.auth.models import User
+from django.urls import reverse
 from django.utils.six import python_2_unicode_compatible
 
 
+# python_2_unicode_compatible 装饰器用于兼容 Python2
 @python_2_unicode_compatible
 class Category(models.Model):
     """
@@ -22,6 +22,7 @@ class Category(models.Model):
         return self.name
 
 
+@python_2_unicode_compatible
 class Tag(models.Model):
     """
     标签 Tag 也比较简单，和 Category 一样。
@@ -33,6 +34,7 @@ class Tag(models.Model):
         return self.name
 
 
+@python_2_unicode_compatible
 class Post(models.Model):
     """
     文章的数据库表稍微复杂一点，主要是涉及的字段更多。
@@ -71,3 +73,8 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    # 自定义 get_absolute_url 方法
+    # 记得从 django.urls 中导入 reverse 函数
+    def get_absolute_url(self):
+        return reverse('blog:detail', kwargs={'pk': self.pk})
